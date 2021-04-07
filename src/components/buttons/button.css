@@ -21,9 +21,9 @@
   cursor: pointer;
 }
 
-@media (hover: none) and (pointer: coarse) {
+/* @media (hover: none) and (pointer: coarse) {
   .prev-arrow,
   .next-arrow {
     display: none;
   }
-}
+} */

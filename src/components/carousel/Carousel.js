@@ -3,20 +3,40 @@ import Button from "../buttons/Button";
 import "./carousel.css";
 
 const Carousel = ({ children }) => {
-  const [index, setIndex] = React.useState(2);
+  const [index, setIndex] = React.useState(3);
   const [length, setLength] = React.useState(children.length);
   const [touchPosition, setTouchPosition] = React.useState(null);
+
+  const [windowSize, setWindowSize] = React.useState(window.innerWidth);
+  const [show, setShow] = React.useState(windowSize < 768 ? 1 : 3);
 
   React.useEffect(() => {
     setLength(children.length);
   }, [children]);
+
+  React.useEffect(() => {
+    // make carousel responsive - on small screen show 1 item, on large screens -3
+    const handleResize = () => {
+      setWindowSize(window.innerWidth);
+      if (windowSize < 768) {
+        setShow(1);
+      }
+
+      if (windowSize > 768) {
+        setShow(3);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [windowSize]);
 
   const handlePrevious = () => {
     index > 0 && setIndex((prevState) => prevState - 1);
   };
 
   const handleNext = () => {
-    index < length - 1 && setIndex((prevState) => prevState + 1);
+    index < length - show && setIndex((prevState) => prevState + 1);
   };
 
   const handleTouchStart = (e) => {
@@ -54,13 +74,15 @@ const Carousel = ({ children }) => {
           onTouchMove={handleTouchMove}
         >
           <div
-            className="carousel-items"
-            style={{ transform: `translateX(-${index * 100}%)` }}
+            className={`carousel-items show-${show}`}
+            style={{
+              transform: `translateX(-${index * (100 / show)}%)`,
+            }}
           >
             {children}
           </div>
         </div>
-        {index < length - 1 ? (
+        {index < length - show ? (
           <Button handleButtonClick={handleNext} direction="next" />
         ) : null}
       </div>

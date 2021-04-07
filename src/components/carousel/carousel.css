@@ -1,0 +1,19 @@
+.carousel-items-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-items {
+  display: flex;
+  transition: transform 300ms linear;
+}
+
+.carousel-items > * {
+  width: 100%;
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+.carousel {
+  position: relative;
+}

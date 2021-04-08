@@ -1,0 +1,21 @@
+.bullets {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bullet.active {
+  background-color: #fff;
+  width: 13px;
+  height: 13px;
+}

@@ -1,44 +1,42 @@
 import React from "react";
 import Button from "../buttons/Button";
+import BulletList from "../bullets/Bullets";
 import "./carousel.css";
 
-const Carousel = ({ children }) => {
-  const [index, setIndex] = React.useState(3);
-  const [length, setLength] = React.useState(children.length);
+const Carousel = ({ images }) => {
+  const [index, setIndex] = React.useState(4);
   const [touchPosition, setTouchPosition] = React.useState(null);
-
-  const [windowSize, setWindowSize] = React.useState(window.innerWidth);
-  const [show, setShow] = React.useState(windowSize < 768 ? 1 : 3);
+  const [imageList, setImageList] = React.useState(images);
 
   React.useEffect(() => {
-    setLength(children.length);
-  }, [children]);
-
-  React.useEffect(() => {
-    // make carousel responsive - on small screen show 1 item, on large screens -3
-    const handleResize = () => {
-      setWindowSize(window.innerWidth);
-      if (windowSize < 768) {
-        setShow(1);
-      }
-
-      if (windowSize > 768) {
-        setShow(3);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [windowSize]);
+    const activeImage = images.find((image) => image.id === index);
+    const newImage = { ...activeImage, active: true };
+    const newImageList = imageList.map((image) =>
+      image.id !== index ? { ...image, active: false } : newImage
+    );
+    setImageList(newImageList);
+  }, [index]);
 
   const handlePrevious = () => {
+    if (index === 0) {
+      setIndex(images.length - 1);
+    }
     index > 0 && setIndex((prevState) => prevState - 1);
   };
 
   const handleNext = () => {
-    index < length - show && setIndex((prevState) => prevState + 1);
+    if (index === images.length - 1) {
+      setIndex(0);
+    }
+    index < images.length - 1 && setIndex((prevState) => prevState + 1);
   };
 
+  // bullet click handler
+  const handleBulletClick = (id) => {
+    setIndex(id);
+  };
+
+  // swipe handlers
   const handleTouchStart = (e) => {
     const touchCoordinates = e.touches[0].clientX;
     setTouchPosition(touchCoordinates);
@@ -64,9 +62,7 @@ const Carousel = ({ children }) => {
   return (
     <>
       <div className="carousel">
-        {index > 0 ? (
-          <Button handleButtonClick={handlePrevious} direction="previous" />
-        ) : null}
+        <Button handleButtonClick={handlePrevious} direction="previous" />
 
         <div
           className="carousel-items-container"
@@ -74,18 +70,28 @@ const Carousel = ({ children }) => {
           onTouchMove={handleTouchMove}
         >
           <div
-            className={`carousel-items show-${show}`}
+            className={`carousel-items`}
             style={{
-              transform: `translateX(-${index * (100 / show)}%)`,
+              transform: `translateX(-${index * 100}%)`,
             }}
           >
-            {children}
+            {images.map((image) => {
+              return (
+                <div key={image.id} style={{ padding: 6 }}>
+                  <img src={image.src} alt="random javascript image" />
+                </div>
+              );
+            })}
           </div>
         </div>
-        {index < length - show ? (
-          <Button handleButtonClick={handleNext} direction="next" />
-        ) : null}
+
+        <Button handleButtonClick={handleNext} direction="next" />
       </div>
+      <BulletList
+        images={imageList}
+        index={index}
+        handleBulletClick={handleBulletClick}
+      />
     </>
   );
 };

@@ -1,3 +1,7 @@
+.carousel {
+  position: relative;
+}
+
 .carousel-items-container {
   overflow: hidden;
   width: 100%;
@@ -5,19 +9,11 @@
 
 .carousel-items {
   display: flex;
-  transition: transform 300ms linear;
+  transition: transform 340ms linear;
 }
 
 .carousel-items > * {
   width: 100%;
   flex-shrink: 0;
   flex-grow: 1;
-}
-
-.carousel {
-  position: relative;
-}
-
-.carousel-items.show-3 > * {
-  width: calc(100% / 3);
 }

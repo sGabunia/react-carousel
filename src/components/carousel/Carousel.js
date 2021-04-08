@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../buttons/Button";
-import BulletList from "../bullets/Bullets";
+import BulletList from "../bullets/BulletList";
 import "./carousel.css";
 
 const Carousel = ({ images }) => {
@@ -9,6 +9,7 @@ const Carousel = ({ images }) => {
   const [imageList, setImageList] = React.useState(images);
 
   React.useEffect(() => {
+    // active image's bullet is highlited
     const activeImage = images.find((image) => image.id === index);
     const newImage = { ...activeImage, active: true };
     const newImageList = imageList.map((image) =>

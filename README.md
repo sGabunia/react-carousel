@@ -1,4 +1,4 @@
-react-carousel
+ react-carousel
 1) works on desktop and mobile
 2) swipes when clicked on arrow buttons
 3) on touch screens supports swipes 
